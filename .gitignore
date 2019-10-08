@@ -1,0 +1,8 @@
+*DS_*
+
+pids
+logs
+
+node_modules
+vendor
+npm-debug.log
