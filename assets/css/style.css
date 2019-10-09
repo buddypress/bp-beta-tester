@@ -1,6 +1,8 @@
 .dashboard_page_bp-beta-tester #wpcontent,
-.dashboard_page_bp-beta-tester.auto-fold #wpcontent {
-    padding-left: 0;
+.dashboard_page_bp-beta-tester.auto-fold #wpcontent,
+.index_page_bp-beta-tester #wpcontent,
+.index_page_bp-beta-tester.auto-fold #wpcontent {
+	padding-left: 0;
 }
 
 /* Emulates .wrap h1 styling */
@@ -14,12 +16,19 @@
 }
 
 .bp-beta-tester-logo {
-    display: inline-block;
-    height: 40px;
-    width: 40px;
-    margin: 0;
-    margin-top: 5px;
-    position: relative;
+	display: inline-block;
+	height: 40px;
+	width: 40px;
+	margin: 0;
+	position: relative;
+	color: #d84800;
+}
+
+.bp-beta-tester-logo .dashicons-buddicons-buddypress-logo:before {
+	font-size: 40px;
+	height: 40px;
+	width: 40px;
+	vertical-align: text-bottom;
 }
 
 .bp-beta-tester-body h2 {
@@ -28,12 +37,12 @@
 }
 
 .bp-beta-tester-body h2.thanks {
-    text-align: center;
+	text-align: center;
 }
 
 .bp-beta-tester-body h2.thanks .dashicons-heart {
-    color: #9e1611;
-    vertical-align: text-bottom;
+	color: #9e1611;
+	vertical-align: text-bottom;
 }
 
 .bp-beta-tester-body h3 {
@@ -87,10 +96,12 @@
 .bp-beta-tester-tab.one-col,
 .bp-beta-tester-tab.two-cols .bp-beta-tester-tab:nth-child(1) {
 	-ms-grid-column: 1; /* IE 11 */
+	grid-column: 1;
 }
 
 .bp-beta-tester-tab.two-cols .bp-beta-tester-tab:nth-child(2) {
 	-ms-grid-column: 2; /* IE 11 */
+	grid-column: 2;
 }
 
 .bp-beta-tester-tab:focus {
