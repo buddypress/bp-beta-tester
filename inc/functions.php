@@ -494,8 +494,28 @@ function bp_beta_tester_admin_menu() {
 	add_action( 'load-' . $page, 'bp_beta_tester_admin_load' );
 }
 
+/**
+ * Add a link to the BP Beta Tester Admin page.
+ *
+ * @since 1.0.0
+ *
+ * @param array  $links        Links array in which we would append our link.
+ * @param string $plugin_file  Current plugin basename.
+ * @return array               Processed links.
+ */
+function bp_beta_tester_plugin_action_links( $links = array(), $plugin_file = '' ) {
+	// Only add the link for BP Beta Tester plugin.
+	if ( 'bp-beta-tester/class-bp-beta-tester.php' === $plugin_file ) {
+		$links['beta-test'] = '<a href="' . esc_url( add_query_arg( array( 'page' => 'bp-beta-tester' ), self_admin_url( 'index.php' ) ) ) . '">' . esc_html__( 'Beta Test BuddyPress', 'bp-beta-tester' ) . '</a>';
+	}
+
+	return $links;
+}
+
 if ( is_multisite() ) {
 	add_action( 'network_admin_menu', 'bp_beta_tester_admin_menu' );
+	add_filter( 'network_admin_plugin_action_links', 'bp_beta_tester_plugin_action_links', 10, 2 );
 } else {
 	add_action( 'admin_menu', 'bp_beta_tester_admin_menu' );
+	add_filter( 'plugin_action_links', 'bp_beta_tester_plugin_action_links', 10, 2 );
 }
