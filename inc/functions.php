@@ -385,7 +385,7 @@ function bp_beta_tester_admin_page() {
 				?>
 			</p>
 		<?php elseif ( isset( $installed['is_stable'] ) && ! $installed['is_stable'] ) : ?>
-			<h2><?php esc_html_e( 'Have you Found a bug or a possible improvement?', 'bp-beta-tester' ); ?></h2>
+			<h2><?php esc_html_e( 'Have you found a bug or a possible improvement?', 'bp-beta-tester' ); ?></h2>
 			<p>
 				<?php
 				printf(
