@@ -216,17 +216,19 @@ function bp_beta_tester_admin_page() {
 				$latest
 			);
 
-			$url = wp_nonce_url(
-				add_query_arg(
-					array(
-						'action'         => 'install-plugin',
-						'plugin'         => 'buddypress',
-						'bp-beta-tester' => $latest,
+			if ( current_user_can( 'install_plugins' ) ) {
+				$url = wp_nonce_url(
+					add_query_arg(
+						array(
+							'action'         => 'install-plugin',
+							'plugin'         => 'buddypress',
+							'bp-beta-tester' => $latest,
+						),
+						self_admin_url( 'update.php' )
 					),
-					self_admin_url( 'update.php' )
-				),
-				'install-plugin_buddypress'
-			);
+					'install-plugin_buddypress'
+				);
+			}
 		} elseif ( isset( $installed['Version'] ) ) {
 			$action = sprintf(
 				/* translators: the %s placeholder is for the BuddyPress release tag. */
@@ -267,6 +269,11 @@ function bp_beta_tester_admin_page() {
 				if ( ! is_null( $new_transient ) ) {
 					set_site_transient( 'update_plugins', $new_transient );
 				}
+			}
+
+			if ( ! current_user_can( 'update_plugins' ) ) {
+				$url    = '';
+				$revert = array();
 			}
 		}
 	}
