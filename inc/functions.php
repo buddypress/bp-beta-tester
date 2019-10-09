@@ -299,19 +299,22 @@ function bp_beta_tester_admin_page() {
 	</div>
 	<hr class="wp-header-end">
 	<div class="bp-beta-tester-body">
-		<p>
-			<?php
-			printf(
-				/* translators: the %s placeholder is for the BuddyPress release tag. */
-				esc_html__( 'The latest BuddyPress release is: %s', 'bp-beta-tester' ),
-				esc_html( $latest )
-			);
-			?>
-		</p>
+		<h2 class="thanks"><?php printf( esc_html__( 'Thank you so much %1$s %2$s', 'bp-beta-tester' ), esc_html( wp_get_current_user()->display_name ), '<span class="dashicons dashicons-heart"></span>' ); ?></h2>
 
-		<?php if ( ! $new_transient && $installed && ! $is_latest_stable ) : ?>
-			<p class="description"><?php esc_html_e( 'You already have the latest release installed.', 'bp-beta-tester' ); ?>
-		<?php endif; ?>
+		<p><?php esc_html_e( 'Thanks for contributing to BuddyPress: beta testing the plugin is very important to make sure it behaves the right way for you and for the community.', 'bp-beta-tester' ); ?></p>
+		<p><?php esc_html_e( 'Although the BuddyPress Core Development Team is regularly testing it, it\'s very challenging to test every possible configuration of WordPress and BuddyPress.', 'bp-beta-tester' ); ?></p>
+
+		<?php if ( $is_latest_stable ) : ?>
+			<p>
+				<?php
+				printf(
+					esc_html__( 'There is no beta or RC release to test currently. Please consider following BuddyPress %1$s or checking %2$s regularly to be informed of the next beta/RC releases.', 'bp-beta-tester' ),
+					'<a href="' . esc_url( 'https://twitter.com/BuddyPress' ) . '">' . esc_html__( 'on Twitter', 'bp-beta-tester' ) . '</a>',
+					'<a href="' . esc_url( 'https://buddypress.org/blog/' ) . '">' . esc_html__( 'our blog', 'bp-beta-tester' ) . '</a>'
+				);
+				?>
+			</p>
+		<?php endif ; ?>
 	</div>
 	<?php
 }

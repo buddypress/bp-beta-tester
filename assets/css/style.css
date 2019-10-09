@@ -27,6 +27,15 @@
 	line-height: 1.4;
 }
 
+.bp-beta-tester-body h2.thanks {
+    text-align: center;
+}
+
+.bp-beta-tester-body h2.thanks .dashicons-heart {
+    color: #9e1611;
+    vertical-align: text-bottom;
+}
+
 .bp-beta-tester-body h3 {
 	padding: 0;
 	font-weight: 400;
