@@ -2,7 +2,7 @@
 /**
  * Globals.
  *
- * @package   buddypress-beta-tester
+ * @package   bp-beta-tester
  * @subpackage \inc\globals
  */
 
@@ -14,11 +14,11 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
-function buddypress_beta_tester_globals() {
-	$bpbt = buddypress_beta_tester();
+function bp_beta_tester_globals() {
+	$bpbt = bp_beta_tester();
 
 	$bpbt->version  = '1.0.0-alpha';
 	$bpbt->dir      = plugin_dir_path( dirname( __FILE__ ) );
 	$bpbt->inc_path = plugin_dir_path( __FILE__ );
 }
-add_action( 'plugins_loaded', 'buddypress_beta_tester_globals' );
+add_action( 'plugins_loaded', 'bp_beta_tester_globals' );

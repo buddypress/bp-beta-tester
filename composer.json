@@ -1,5 +1,5 @@
 {
-  "name": "imath/buddypress-beta-tester",
+  "name": "buddypress/bp-beta-tester",
   "description": "A plugin to switch between stable, beta or RC versions of BuddyPress.",
   "type": "wordpress-plugin",
   "require": {

@@ -2,7 +2,7 @@
 /**
  * Functions.
  *
- * @package   buddypress-beta-tester
+ * @package   bp-beta-tester
  * @subpackage \inc\functions
  */
 
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * @param string $b The BuddyPress version to compare with.
  * @return boolean  True if $a < $b.
  */
-function buddypress_beta_tester_sort_versions( $a, $b ) {
+function bp_beta_tester_sort_versions( $a, $b ) {
 	return version_compare( $a, $b, '<' );
 }
 
@@ -27,7 +27,7 @@ function buddypress_beta_tester_sort_versions( $a, $b ) {
  *
  * @since 1.0.0
  */
-function buddypress_beta_tester_get_updates_url() {
+function bp_beta_tester_get_updates_url() {
 	return wp_nonce_url(
 		add_query_arg(
 			array(
@@ -49,7 +49,7 @@ function buddypress_beta_tester_get_updates_url() {
  * @param  string          $version The version to use for this upgrade or downgrade.
  * @return object                   The site transient to use for this upgrade.
  */
-function buddypress_beta_tester_get_version( $api = null, $version = '' ) {
+function bp_beta_tester_get_version( $api = null, $version = '' ) {
 	$new_transient = null;
 
 	if ( is_wp_error( $api ) || ! $api || ! $version ) {
@@ -65,17 +65,17 @@ function buddypress_beta_tester_get_version( $api = null, $version = '' ) {
 
 	if ( ! isset( $updates->response[ $plugin_file ] ) ) {
 		$icons = array();
-		if ( isset( $api->icons ) )  {
+		if ( isset( $api->icons ) ) {
 			$icons = $api->icons;
 		}
 
 		$banners = array();
-		if ( isset( $api->banners ) )  {
+		if ( isset( $api->banners ) ) {
 			$banners = $api->banners;
 		}
 
 		$banners_rtl = array();
-		if ( isset( $api->banners_rtl ) )  {
+		if ( isset( $api->banners_rtl ) ) {
 			$banners_rtl = $api->banners_rtl;
 		} else {
 			$banners_rtl = $banners;
@@ -111,10 +111,10 @@ function buddypress_beta_tester_get_version( $api = null, $version = '' ) {
  *
  * @since 1.0.0
  */
-function buddypress_beta_tester_admin_load() {
+function bp_beta_tester_admin_load() {
 	include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 
-	$bpbt = buddypress_beta_tester();
+	$bpbt      = bp_beta_tester();
 	$bpbt->api = plugins_api(
 		'plugin_information',
 		array(
@@ -132,19 +132,19 @@ function buddypress_beta_tester_admin_load() {
 		check_admin_referer( 'restore_stable_buddypress' );
 
 		$stable = '';
-		if ( isset( $_GET['stable'] ) && $_GET['stable'] ) {
-			$stable = wp_unslash( $_GET['stable'] );
+		if ( isset( $_GET['stable'] ) ) {
+			$stable = wp_unslash( $_GET['stable'] ); // phpcs:ignore
 		}
 
 		if ( isset( $bpbt->api->versions[ $stable ] ) ) {
 			$plugin_file   = 'buddypress/bp-loader.php';
-			$new_transient = buddypress_beta_tester_get_version( $bpbt->api, $stable );
+			$new_transient = bp_beta_tester_get_version( $bpbt->api, $stable );
 
 			if ( ! is_null( $new_transient ) ) {
 				set_site_transient( 'update_plugins', $new_transient );
 
 				// We need to do this to make sure the redirect works as expected.
-				$redirect_url = str_replace( '&amp;', '&', buddypress_beta_tester_get_updates_url() );
+				$redirect_url = str_replace( '&amp;', '&', bp_beta_tester_get_updates_url() );
 
 				wp_safe_redirect( $redirect_url );
 				exit();
@@ -158,8 +158,8 @@ function buddypress_beta_tester_admin_load() {
  *
  * @since 1.0.0
  */
-function buddypress_beta_tester_admin_page() {
-	$bpbt            = buddypress_beta_tester();
+function bp_beta_tester_admin_page() {
+	$bpbt             = bp_beta_tester();
 	$latest           = '';
 	$new_transient    = null;
 	$is_latest_stable = false;
@@ -167,14 +167,14 @@ function buddypress_beta_tester_admin_page() {
 	if ( isset( $bpbt->api ) && $bpbt->api ) {
 		$api = $bpbt->api;
 	} else {
-		$api = new WP_Error( 'unavailable_plugins_api', __( 'The Plugins API is unavailable.', 'buddypress_beta_tester' ) );
+		$api = new WP_Error( 'unavailable_plugins_api', __( 'The Plugins API is unavailable.', 'bp_beta_tester' ) );
 	}
 
 	if ( ! is_wp_error( $api ) ) {
 		$versions = $api->versions;
 
 		// Sort versions so that latest are first.
-		uksort( $versions, 'buddypress_beta_tester_sort_versions' );
+		uksort( $versions, 'bp_beta_tester_sort_versions' );
 
 		$releases         = array_keys( $versions );
 		$latest           = reset( $releases );
@@ -185,23 +185,23 @@ function buddypress_beta_tester_admin_page() {
 		$revert           = array();
 		$action           = '';
 
-		if ( file_exists( WP_PLUGIN_DIR .'/' . $plugin_file ) ) {
-			$installed = get_plugin_data( WP_PLUGIN_DIR .'/buddypress/bp-loader.php', false, false );
+		if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin_file ) ) {
+			$installed = get_plugin_data( WP_PLUGIN_DIR . '/buddypress/bp-loader.php', false, false );
 		}
 
 		if ( ! $installed ) {
 			$action = sprintf(
 				/* translators: the %s placeholder is for the BuddyPress release tag. */
-				__( 'Install %s', 'buddypress-beta-tester' ),
+				__( 'Install %s', 'bp-beta-tester' ),
 				$latest
 			);
 
 			$url = wp_nonce_url(
 				add_query_arg(
 					array(
-						'action'                 => 'install-plugin',
-						'plugin'                 => 'buddypress',
-						'buddypress-beta-tester' => $latest,
+						'action'         => 'install-plugin',
+						'plugin'         => 'buddypress',
+						'bp-beta-tester' => $latest,
 					),
 					self_admin_url( 'update.php' )
 				),
@@ -210,7 +210,7 @@ function buddypress_beta_tester_admin_page() {
 		} elseif ( isset( $installed['Version'] ) ) {
 			$action = sprintf(
 				/* translators: the %s placeholder is for the BuddyPress release tag. */
-				__( 'Upgrade to %s', 'buddypress-beta-tester' ),
+				__( 'Upgrade to %s', 'bp-beta-tester' ),
 				$latest
 			);
 
@@ -221,18 +221,18 @@ function buddypress_beta_tester_admin_page() {
 				foreach ( $versions as $version => $package ) {
 					if ( false === strpos( $version, '-' ) ) {
 						$revert = array(
-							'url' => wp_nonce_url(
+							'url'     => wp_nonce_url(
 								add_query_arg(
 									array(
-										'action'  => 'restore-stable',
-										'page'    => 'buddypress-beta-tester',
-										'stable'  => $version
+										'action' => 'restore-stable',
+										'page'   => 'bp-beta-tester',
+										'stable' => $version,
 									),
 									self_admin_url( 'tools.php' )
 								),
 								'restore_stable_buddypress'
 							),
-							'version' => $version
+							'version' => $version,
 						);
 						break;
 					}
@@ -240,9 +240,9 @@ function buddypress_beta_tester_admin_page() {
 			}
 
 			if ( ! $is_latest_stable && version_compare( $installed['Version'], $latest, '<' ) ) {
-				$url = buddypress_beta_tester_get_updates_url();
+				$url = bp_beta_tester_get_updates_url();
 
-				$new_transient = buddypress_beta_tester_get_version( $api, $latest );
+				$new_transient = bp_beta_tester_get_version( $api, $latest );
 
 				if ( ! is_null( $new_transient ) ) {
 					set_site_transient( 'update_plugins', $new_transient );
@@ -252,12 +252,12 @@ function buddypress_beta_tester_admin_page() {
 	}
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'BuddyPress Beta Tester', 'buddypress-beta-tester' ); ?></h1>
+		<h1><?php esc_html_e( 'BuddyPress Beta Tester', 'bp-beta-tester' ); ?></h1>
 		<p>
 			<?php
 			printf(
 				/* translators: the %s placeholder is for the BuddyPress release tag. */
-				esc_html__( 'The latest BuddyPress release is: %s', 'buddypress-beta-tester' ),
+				esc_html__( 'The latest BuddyPress release is: %s', 'bp-beta-tester' ),
 				esc_html( $latest )
 			);
 			?>
@@ -277,7 +277,7 @@ function buddypress_beta_tester_admin_page() {
 						<?php
 						printf(
 							/* translators: the %s placeholder is for the BuddyPress release tag. */
-							esc_html__( 'Revert to %s', 'buddypress-beta-tester' ),
+							esc_html__( 'Downgrade to %s', 'bp-beta-tester' ),
 							esc_html( $revert['version'] )
 						);
 						?>
@@ -287,7 +287,7 @@ function buddypress_beta_tester_admin_page() {
 		</ul>
 
 		<?php if ( ! $new_transient && $installed && ! $is_latest_stable ) : ?>
-			<p class="description"><?php esc_html_e( 'You already have the latest release installed.', 'buddypress-beta-tester' ); ?>
+			<p class="description"><?php esc_html_e( 'You already have the latest release installed.', 'bp-beta-tester' ); ?>
 		<?php endif; ?>
 	</div>
 	<?php
@@ -302,17 +302,17 @@ function buddypress_beta_tester_admin_page() {
  * @param string $action The type of information being requested from the Plugin API.
  * @return object        The Plugin API arguments.
  */
-function buddypress_beta_tester_plugins_api_args( $args = null, $action = '' ) {
+function bp_beta_tester_plugins_api_args( $args = null, $action = '' ) {
 	if ( 'plugin_information' !== $action || ! isset( $args->slug ) ) {
 		return $args;
 	}
 
 	if ( 'buddypress' === $args->slug ) {
-		$bpbt             = buddypress_beta_tester();
+		$bpbt             = bp_beta_tester();
 		$bpbt->beta_or_rc = '';
 
-		if ( isset( $_GET['buddypress-beta-tester'] ) && $_GET['buddypress-beta-tester'] ) {
-			$bpbt->beta_or_rc = wp_unslash( $_GET['buddypress-beta-tester'] );
+		if ( isset( $_GET['bp-beta-tester'] ) && $_GET['bp-beta-tester'] ) { // phpcs:ignore
+			$bpbt->beta_or_rc = wp_unslash( $_GET['bp-beta-tester'] ); // phpcs:ignore
 		}
 
 		if ( $bpbt->beta_or_rc ) {
@@ -322,7 +322,7 @@ function buddypress_beta_tester_plugins_api_args( $args = null, $action = '' ) {
 
 	return $args;
 }
-add_filter( 'plugins_api_args', 'buddypress_beta_tester_plugins_api_args', 10, 2 );
+add_filter( 'plugins_api_args', 'bp_beta_tester_plugins_api_args', 10, 2 );
 
 /**
  * Filter the Plugin API response results to eventually override the download link.
@@ -334,12 +334,12 @@ add_filter( 'plugins_api_args', 'buddypress_beta_tester_plugins_api_args', 10, 2
  * @param object          $args   Plugin API arguments.
  * @return object|WP_Error        The Plugin API response or WP_error.
  */
-function buddypress_beta_tester_plugins_api( $res = null, $action = '', $args = array() ) {
+function bp_beta_tester_plugins_api( $res = null, $action = '', $args = array() ) {
 	if ( is_wp_error( $res ) || 'plugin_information' !== $action || 'buddypress' !== $res->slug ) {
 		return $res;
 	}
 
-	$bpbt       = buddypress_beta_tester();
+	$bpbt       = bp_beta_tester();
 	$beta_or_rc = '';
 
 	if ( isset( $bpbt->beta_or_rc ) && $bpbt->beta_or_rc ) {
@@ -357,7 +357,7 @@ function buddypress_beta_tester_plugins_api( $res = null, $action = '', $args = 
 				'invalid_version',
 				sprintf(
 					/* translators: the %s placeholder is for the BuddyPress release tag. */
-					esc_html__( 'The BuddyPress version %s is not available on WordPress.org.', 'buddypress-beta-tester' ),
+					esc_html__( 'The BuddyPress version %s is not available on WordPress.org.', 'bp-beta-tester' ),
 					esc_html( $beta_or_rc )
 				)
 			);
@@ -366,22 +366,22 @@ function buddypress_beta_tester_plugins_api( $res = null, $action = '', $args = 
 
 	return $res;
 }
-add_filter( 'plugins_api_result', 'buddypress_beta_tester_plugins_api', 10, 3 );
+add_filter( 'plugins_api_result', 'bp_beta_tester_plugins_api', 10, 3 );
 
 /**
  * Add a Tools submenu.
  *
  * @since 1.0.0
  */
-function buddypress_beta_tester_admin_menu() {
+function bp_beta_tester_admin_menu() {
 	$screen = add_management_page(
-		__( 'BuddyPress Beta Tester', 'buddypress-beta-tester' ),
-		__( 'BetaTest BuddyPress', 'buddypress-beta-tester' ),
+		__( 'BuddyPress Beta Tester', 'bp-beta-tester' ),
+		__( 'BetaTest BuddyPress', 'bp-beta-tester' ),
 		'manage_options',
-		'buddypress-beta-tester',
-		'buddypress_beta_tester_admin_page'
+		'bp-beta-tester',
+		'bp_beta_tester_admin_page'
 	);
 
-	add_action( 'load-' . $screen, 'buddypress_beta_tester_admin_load' );
+	add_action( 'load-' . $screen, 'bp_beta_tester_admin_load' );
 }
-add_action( 'admin_menu', 'buddypress_beta_tester_admin_menu' );
+add_action( 'admin_menu', 'bp_beta_tester_admin_menu' );

@@ -2,24 +2,24 @@
 /**
  * A plugin to switch between stable, beta or RC versions of BuddyPress.
  *
- * @package   buddypress-beta-tester
- * @author    imath
+ * @package   bp-beta-tester
+ * @author    The BuddyPress Community
  * @license   GPL-2.0+
- * @link      https://imathi.eu
+ * @link      https://buddypress.org
  *
  * @wordpress-plugin
- * Plugin Name:       BuddyPress Beta Tester
- * Plugin URI:        https://github.com/imath/buddypress-beta-tester
+ * Plugin Name:       BP Beta Tester
+ * Plugin URI:        https://github.com/buddypress/bp-beta-tester
  * Description:       A plugin to switch between stable, beta or RC versions of BuddyPress.
  * Version:           1.0.0-alpha
- * Author:            imath
- * Author URI:        https://github.com/imath
- * Text Domain:       carte-de-survol
+ * Author:            The BuddyPress Community
+ * Author URI:        https://buddypress.org
+ * Text Domain:       bp-beta-tester
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:       /languages/
  * Network:           True
- * GitHub Plugin URI: https://github.com/imath/buddypress-beta-tester
+ * GitHub Plugin URI: https://github.com/buddypress/bp-beta-tester
  */
 
 // Exit if accessed directly.
@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
-final class BuddyPress_Beta_Tester {
+final class BP_Beta_Tester {
 	/**
 	 * Instance of this class.
 	 *
@@ -78,13 +78,13 @@ final class BuddyPress_Beta_Tester {
  *
  * @since 1.0.0
  *
- * @return BuddyPress_Beta_Tester The main instance of the plugin.
+ * @return BP_Beta_Tester The main instance of the plugin.
  */
-function buddypress_beta_tester() {
+function bp_beta_tester() {
 	if ( ! is_admin() ) {
 		return;
 	}
 
-	return BuddyPress_Beta_Tester::start();
+	return BP_Beta_Tester::start();
 }
-add_action( 'plugins_loaded', 'buddypress_beta_tester', 8 );
+add_action( 'plugins_loaded', 'bp_beta_tester', 8 );
