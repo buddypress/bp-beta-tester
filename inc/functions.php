@@ -154,7 +154,26 @@ function bp_beta_tester_admin_load() {
 }
 
 /**
- * Display the Tools page.
+ * Register and enqueue admin style.
+ *
+ * @since 1.0.0
+ */
+function bp_beta_tester_enqueue_style() {
+	$bpbt = bp_beta_tester();
+
+	wp_register_style(
+		'bp-beta-tester',
+		$bpbt->css_url . 'style.css',
+		array(),
+		$bpbt->version
+	);
+
+	wp_enqueue_style( 'bp-beta-tester' );
+}
+add_action( 'admin_enqueue_scripts', 'bp_beta_tester_enqueue_style' );
+
+/**
+ * Display the Dashboard submenu page.
  *
  * @since 1.0.0
  */
@@ -228,7 +247,7 @@ function bp_beta_tester_admin_page() {
 										'page'   => 'bp-beta-tester',
 										'stable' => $version,
 									),
-									self_admin_url( 'tools.php' )
+									self_admin_url( 'index.php' )
 								),
 								'restore_stable_buddypress'
 							),
@@ -251,8 +270,35 @@ function bp_beta_tester_admin_page() {
 		}
 	}
 	?>
-	<div class="wrap">
-		<h1><?php esc_html_e( 'BuddyPress Beta Tester', 'bp-beta-tester' ); ?></h1>
+	<div class="bp-beta-tester-header">
+		<div class="bp-beta-tester-title-section">
+			<h1><?php esc_html_e( 'Beta Test BuddyPress', 'bp-beta-tester' ); ?></h1>
+			<div class="bp-beta-tester-logo">
+				<img aria-hidden="true" focusable="false" width="100%" height="100%" src="<?php echo esc_url( $api->icons['svg'] ); ?>">
+			</div>
+		</div>
+		<nav class="bp-beta-tester-tabs-wrapper <?php echo ! $revert['url'] || ! ( $new_transient || $is_latest_stable || ! $installed ) ? 'one-col' : 'two-cols' ?>" aria-label="<?php esc_html_e( 'Main actions', 'bp-beta-tester' ); ?>">
+			<?php if ( $new_transient || $is_latest_stable || ! $installed ) : ?>
+				<a href="<?php echo esc_url( $url ); ?>" class="bp-beta-tester-tab active">
+					<?php echo esc_html( $action ); ?>
+				</a>
+			<?php endif; ?>
+
+			<?php if ( $revert['url'] ) : ?>
+				<a href="<?php echo esc_url( $revert['url'] ); ?>" class="bp-beta-tester-tab">
+					<?php
+					printf(
+						/* translators: the %s placeholder is for the BuddyPress release tag. */
+						esc_html__( 'Downgrade to %s', 'bp-beta-tester' ),
+						esc_html( $revert['version'] )
+					);
+					?>
+				</a>
+			<?php endif; ?>
+		</nav>
+	</div>
+	<hr class="wp-header-end">
+	<div class="bp-beta-tester-body">
 		<p>
 			<?php
 			printf(
@@ -262,29 +308,6 @@ function bp_beta_tester_admin_page() {
 			);
 			?>
 		</p>
-		<ul>
-			<?php if ( $new_transient || $is_latest_stable || ! $installed ) : ?>
-				<li>
-					<a href="<?php echo esc_url( $url ); ?>" class="button button-primary">
-						<?php echo esc_html( $action ); ?>
-					</a>
-				</li>
-			<?php endif; ?>
-
-			<?php if ( $revert['url'] ) : ?>
-				<li>
-					<a href="<?php echo esc_url( $revert['url'] ); ?>" class="button button-secondary">
-						<?php
-						printf(
-							/* translators: the %s placeholder is for the BuddyPress release tag. */
-							esc_html__( 'Downgrade to %s', 'bp-beta-tester' ),
-							esc_html( $revert['version'] )
-						);
-						?>
-					</a>
-				</li>
-			<?php endif; ?>
-		</ul>
 
 		<?php if ( ! $new_transient && $installed && ! $is_latest_stable ) : ?>
 			<p class="description"><?php esc_html_e( 'You already have the latest release installed.', 'bp-beta-tester' ); ?>
@@ -369,19 +392,24 @@ function bp_beta_tester_plugins_api( $res = null, $action = '', $args = array() 
 add_filter( 'plugins_api_result', 'bp_beta_tester_plugins_api', 10, 3 );
 
 /**
- * Add a Tools submenu.
+ * Add a Dashboard submenu.
  *
  * @since 1.0.0
  */
 function bp_beta_tester_admin_menu() {
-	$screen = add_management_page(
+	$page = add_dashboard_page(
 		__( 'BuddyPress Beta Tester', 'bp-beta-tester' ),
-		__( 'BetaTest BuddyPress', 'bp-beta-tester' ),
+		__( 'Beta Test BuddyPress', 'bp-beta-tester' ),
 		'manage_options',
 		'bp-beta-tester',
 		'bp_beta_tester_admin_page'
 	);
 
-	add_action( 'load-' . $screen, 'bp_beta_tester_admin_load' );
+	add_action( 'load-' . $page, 'bp_beta_tester_admin_load' );
 }
-add_action( 'admin_menu', 'bp_beta_tester_admin_menu' );
+
+if ( is_multisite() ) {
+	add_action( 'network_admin_menu', 'bp_beta_tester_admin_menu' );
+} else {
+	add_action( 'admin_menu', 'bp_beta_tester_admin_menu' );
+}

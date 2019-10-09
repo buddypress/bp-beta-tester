@@ -1,0 +1,135 @@
+.dashboard_page_bp-beta-tester #wpcontent,
+.dashboard_page_bp-beta-tester.auto-fold #wpcontent {
+    padding-left: 0;
+}
+
+/* Emulates .wrap h1 styling */
+.bp-beta-tester-header h1 {
+	display: inline-block;
+	font-weight: 600;
+	margin: 1rem 0.8rem;
+	font-size: 23px;
+	padding: 9px 0 4px 0;
+	line-height: 1.3;
+}
+
+.bp-beta-tester-logo {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    margin: 0;
+    margin-top: 5px;
+    position: relative;
+}
+
+.bp-beta-tester-body h2 {
+	padding: 1rem 0;
+	line-height: 1.4;
+}
+
+.bp-beta-tester-body h3 {
+	padding: 0;
+	font-weight: 400;
+}
+
+.bp-beta-tester-header {
+	text-align: center;
+	margin: 0 0 1rem;
+	background: #fff;
+	border-bottom: 1px solid #e2e4e7;
+}
+
+.bp-beta-tester-title-section {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	clear: both;
+}
+
+.bp-beta-tester-tabs-wrapper.two-cols {
+	/* IE 11 */
+	display: -ms-inline-grid;
+	-ms-grid-columns: 1fr 1fr;
+	vertical-align: top;
+	/* modern browsers */
+	display: inline-grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.bp-beta-tester-tabs-wrapper.one-col {
+	/* IE 11 */
+	display: -ms-inline-grid;
+	-ms-grid-columns: 1fr;
+	vertical-align: top;
+	/* modern browsers */
+	display: inline-grid;
+	grid-template-columns: 1fr;
+}
+
+.bp-beta-tester-tab {
+	display: block; /* IE 11 */
+	text-decoration: none;
+	color: inherit;
+	padding: 0.5rem 1rem 1rem;
+	margin: 0 1rem;
+	transition: box-shadow 0.5s ease-in-out;
+}
+
+.bp-beta-tester-tab.one-col,
+.bp-beta-tester-tab.two-cols .bp-beta-tester-tab:nth-child(1) {
+	-ms-grid-column: 1; /* IE 11 */
+}
+
+.bp-beta-tester-tab.two-cols .bp-beta-tester-tab:nth-child(2) {
+	-ms-grid-column: 2; /* IE 11 */
+}
+
+.bp-beta-tester-tab:focus {
+	color: #191e23;
+	outline: 1px solid #6c7781;
+	box-shadow: none;
+}
+
+.bp-beta-tester-tab.active {
+	box-shadow: inset 0 -3px #007cba;
+	font-weight: 600;
+}
+
+.bp-beta-tester-body {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+/* Better position for the WordPress admin notices and update nag. */
+.dashboard_page_bp-beta-tester .notice {
+	margin: 5px 20px 15px 22px;
+}
+
+.dashboard_page_bp-beta-tester .update-nag {
+	margin-bottom: 20px;
+	margin-left: 22px;
+}
+
+@media screen and (max-width: 782px) {
+	.bp-beta-tester-body {
+		margin: 0 12px;
+		width: auto;
+	}
+
+	.dashboard_page_bp-beta-tester .notice {
+		margin: 5px 10px 15px;
+	}
+
+	.dashboard_page_bp-beta-tester .update-nag {
+		margin-right: 10px;
+		margin-left: 10px;
+	}
+}
+
+/* The breakpoint is usually at 960px, the additional space is to allow for the margin. */
+@media only screen and (max-width: 1004px) {
+	.bp-beta-tester-body {
+		margin: 0 22px;
+		width: auto;
+	}
+}
