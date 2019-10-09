@@ -206,6 +206,7 @@ function bp_beta_tester_admin_page() {
 
 		if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin_file ) ) {
 			$installed = get_plugin_data( WP_PLUGIN_DIR . '/buddypress/bp-loader.php', false, false );
+			$installed['is_stable'] = false === strpos( $installed['Version'], '-' );
 		}
 
 		if ( ! $installed ) {
@@ -235,7 +236,7 @@ function bp_beta_tester_admin_page() {
 
 			if ( $is_latest_stable ) {
 				$url = self_admin_url( 'update-core.php' );
-			} elseif ( false !== strpos( $installed['Version'], '-' ) ) {
+			} elseif ( ! $installed['is_stable'] ) {
 				// Find the first stable version to be able to switch to it.
 				foreach ( $versions as $version => $package ) {
 					if ( false === strpos( $version, '-' ) ) {
@@ -315,7 +316,7 @@ function bp_beta_tester_admin_page() {
 		<p>
 			<?php
 			/* translators: %s is the link to the WP Core Contributor handbook page about installing WordPress locally. */
-			printf( esc_html__( 'Please make sure to avoid using this plugin on a production site: beta testing is always safer when it\'s done on a %s of your site.', 'bp-beta-tester' ),
+			printf( esc_html__( 'Please make sure to avoid using this plugin on a production site: beta testing is always safer when it\'s done on a %s of your site or on a testing site.', 'bp-beta-tester' ),
 				'<a href="' . esc_url( 'https://make.wordpress.org/core/handbook/tutorials/installing-wordpress-locally/' ) . '">' . esc_html__( 'local copy', 'bp-beta-tester' ) . '</a>'
 			);
 			?>
@@ -332,6 +333,19 @@ function bp_beta_tester_admin_page() {
 				);
 				?>
 			</p>
+		<?php elseif ( isset( $installed['is_stable'] ) && ! $installed['is_stable'] ) : ?>
+			<h2><?php esc_html_e( 'Have you Found a bug or a possible improvement?', 'bp-beta-tester' ); ?></h2>
+			<p>
+				<?php
+				/* translators: %1$s is the link to the BuddyPress Trac and %2$s is the link to the BuddyPress Support forums. */
+				printf(
+					esc_html__( 'Please let us know about it opening a new ticket on our %1$s or posting a new topic in our %2$s.', 'bp-beta-tester' ),
+					'<a href="' . esc_url( 'https://buddypress.trac.wordpress.org/newticket' ) . '">' . esc_html__( 'Development Tracker', 'bp-beta-tester' ) . '</a>',
+					'<a href="' . esc_url( 'https://buddypress.org/support/' ) . '">' . esc_html__( 'support forums', 'bp-beta-tester' ) . '</a>'
+				);
+				?>
+			</p>
+			<p><?php esc_html_e( 'One of the Core Developers/Support forum moderators will review your feedback and we\'ll do our best to fix it before the stable version is made available to the public.', 'bp-beta-tester' ); ?></p>
 		<?php endif ; ?>
 	</div>
 	<?php
