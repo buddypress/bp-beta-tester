@@ -247,6 +247,7 @@ function bp_beta_tester_admin_page() {
 		if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin_file ) ) {
 			$installed              = get_plugin_data( WP_PLUGIN_DIR . '/buddypress/bp-loader.php', false, false );
 			$installed['is_stable'] = false === strpos( $installed['Version'], '-' );
+			$installed['is_older']  = version_compare( $installed['Version'], $latest, '<' );
 		}
 
 		if ( ! $installed ) {
@@ -276,7 +277,7 @@ function bp_beta_tester_admin_page() {
 				$latest
 			);
 
-			if ( $is_latest_stable ) {
+			if ( $is_latest_stable && $installed['is_older'] ) {
 				$url = self_admin_url( 'update-core.php' );
 			} elseif ( ! $installed['is_stable'] ) {
 				// Find the first stable version to be able to switch to it.
@@ -301,7 +302,7 @@ function bp_beta_tester_admin_page() {
 				}
 			}
 
-			if ( ! $is_latest_stable && version_compare( $installed['Version'], $latest, '<' ) ) {
+			if ( ! $is_latest_stable && $installed['is_older'] ) {
 				$url = bp_beta_tester_get_updates_url();
 
 				$new_transient = bp_beta_tester_get_version( $api, $latest );
@@ -318,7 +319,7 @@ function bp_beta_tester_admin_page() {
 		}
 	}
 
-	$has_upgrade_tab   = $new_transient || ( $is_latest_stable && $installed && $latest !== $installed['Version'] ) || ! $installed;
+	$has_upgrade_tab   = $new_transient || ( $is_latest_stable && isset( $installed['is_older'] ) && $installed['is_older'] ) || ! $installed;
 	$has_downgrade_tab = isset( $revert['url'] ) && $revert['url'];
 	?>
 	<div class="bp-beta-tester-header">
