@@ -1,0 +1,30 @@
+{
+	"author": "buddypress",
+	"bugs": {
+		"url": "https://github.com/buddypress/bp-beta-tester/issues"
+	},
+	"description": "A plugin to switch between stable, beta or RC versions of BuddyPress.",
+	"engines": {
+		"node": "10.13.0",
+		"npm": "6.12.0"
+	},
+	"scripts": {
+		"wpcs": "./vendor/bin/phpcs class-bp-beta-tester.php inc/*.php --standard=WordPress",
+		"pot": "wp i18n make-pot . languages/bp-beta-tester.pot"
+	},
+	"keywords": [
+		"buddypress",
+		"beta",
+		"RC",
+		"test",
+		"betatest"
+	],
+	"homepage": "https://github.com/buddypress/bp-beta-tester",
+	"license": "GPL-2.0+",
+	"name": "bp-beta-tester",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/buddypress/bp-beta-tester.git"
+	},
+	"version": "1.0.0-beta1"
+}
