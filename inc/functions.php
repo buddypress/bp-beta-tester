@@ -219,6 +219,9 @@ function bp_beta_tester_admin_page() {
 	$latest           = '';
 	$new_transient    = null;
 	$is_latest_stable = false;
+	$installed        = array();
+	$action           = '';
+	$url              = '';
 
 	// Disable the override.
 	remove_filter( 'pre_site_transient_update_plugins', 'bp_beta_tester_reset_update_plugins' );
@@ -238,11 +241,8 @@ function bp_beta_tester_admin_page() {
 		$releases         = array_keys( $versions );
 		$latest           = reset( $releases );
 		$is_latest_stable = false === strpos( $latest, '-' );
-		$installed        = array();
 		$plugin_file      = 'buddypress/bp-loader.php';
-		$url              = '';
 		$revert           = array();
-		$action           = '';
 
 		if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin_file ) ) {
 			$installed              = get_plugin_data( WP_PLUGIN_DIR . '/buddypress/bp-loader.php', false, false );
@@ -330,7 +330,7 @@ function bp_beta_tester_admin_page() {
 			</div>
 		</div>
 		<nav class="bp-beta-tester-tabs-wrapper <?php echo ! $has_downgrade_tab || ! $has_upgrade_tab ? 'one-col' : 'two-cols'; ?>" aria-label="<?php esc_html_e( 'Main actions', 'bp-beta-tester' ); ?>">
-			<?php if ( $has_upgrade_tab ) : ?>
+			<?php if ( $has_upgrade_tab && $url ) : ?>
 				<a href="<?php echo esc_url( $url ); ?>" class="bp-beta-tester-tab active">
 					<?php echo esc_html( $action ); ?>
 				</a>
@@ -351,53 +351,63 @@ function bp_beta_tester_admin_page() {
 	</div>
 	<hr class="wp-header-end">
 	<div class="bp-beta-tester-body">
-		<h2 class="thanks">
-			<?php
-			printf(
-				/* translators: %1$s is the current user display name and %2$s is a heart dashicon. */
-				esc_html__( 'Thank you so much %1$s %2$s', 'bp-beta-tester' ),
-				esc_html( wp_get_current_user()->display_name ),
-				'<span class="dashicons dashicons-heart"></span>'
-			);
-			?>
-		</h2>
 
-		<p><?php esc_html_e( 'Thanks for contributing to BuddyPress: beta testing the plugin is very important to make sure it behaves the right way for you and for the community.', 'bp-beta-tester' ); ?></p>
-		<p><?php esc_html_e( 'Although the BuddyPress Core Development Team is regularly testing it, it\'s very challenging to test every possible configuration of WordPress and BuddyPress.', 'bp-beta-tester' ); ?></p>
-		<p>
-			<?php
-			printf(
-				/* translators: %s is the link to the WP Core Contributor handbook page about installing WordPress locally. */
-				esc_html__( 'Please make sure to avoid using this plugin on a production site: beta testing is always safer when it\'s done on a %s of your site or on a testing site.', 'bp-beta-tester' ),
-				'<a href="' . esc_url( 'https://make.wordpress.org/core/handbook/tutorials/installing-wordpress-locally/' ) . '">' . esc_html__( 'local copy', 'bp-beta-tester' ) . '</a>'
-			);
-			?>
-		</p>
+		<?php if ( is_wp_error( $api ) ) : ?>
 
-		<?php if ( $is_latest_stable ) : ?>
+			<div id="message" class="notice notice-error">
+				<p><?php echo wp_kses( $api->get_error_message(), array( 'a' => array( 'href' => true ) ) ); ?></p>
+			</div>
+
+		<?php else : ?>
+
+			<h2 class="thanks">
+				<?php
+				printf(
+					/* translators: %1$s is the current user display name and %2$s is a heart dashicon. */
+					esc_html__( 'Thank you so much %1$s %2$s', 'bp-beta-tester' ),
+					esc_html( wp_get_current_user()->display_name ),
+					'<span class="dashicons dashicons-heart"></span>'
+				);
+				?>
+			</h2>
+
+			<p><?php esc_html_e( 'Thanks for contributing to BuddyPress: beta testing the plugin is very important to make sure it behaves the right way for you and for the community.', 'bp-beta-tester' ); ?></p>
+			<p><?php esc_html_e( 'Although the BuddyPress Core Development Team is regularly testing it, it\'s very challenging to test every possible configuration of WordPress and BuddyPress.', 'bp-beta-tester' ); ?></p>
 			<p>
 				<?php
 				printf(
-					/* translators: %1$s is the link to the BuddyPress account on Twitter and %2$s is the link to the BuddyPress blog. */
-					esc_html__( 'There is no pre-releases to test currently. Please consider following BuddyPress %1$s or checking %2$s regularly to be informed of the next pre-releases.', 'bp-beta-tester' ),
-					'<a href="' . esc_url( 'https://twitter.com/BuddyPress' ) . '">' . esc_html__( 'on Twitter', 'bp-beta-tester' ) . '</a>',
-					'<a href="' . esc_url( 'https://buddypress.org/blog/' ) . '">' . esc_html__( 'our blog', 'bp-beta-tester' ) . '</a>'
+					/* translators: %s is the link to the WP Core Contributor handbook page about installing WordPress locally. */
+					esc_html__( 'Please make sure to avoid using this plugin on a production site: beta testing is always safer when it\'s done on a %s of your site or on a testing site.', 'bp-beta-tester' ),
+					'<a href="' . esc_url( 'https://make.wordpress.org/core/handbook/tutorials/installing-wordpress-locally/' ) . '">' . esc_html__( 'local copy', 'bp-beta-tester' ) . '</a>'
 				);
 				?>
 			</p>
-		<?php elseif ( isset( $installed['is_stable'] ) && ! $installed['is_stable'] ) : ?>
-			<h2><?php esc_html_e( 'Have you found a bug or a possible improvement?', 'bp-beta-tester' ); ?></h2>
-			<p>
-				<?php
-				printf(
-					/* translators: %1$s is the link to the BuddyPress Trac and %2$s is the link to the BuddyPress Support forums. */
-					esc_html__( 'Please let us know about it opening a new ticket on our %1$s or posting a new topic in our %2$s.', 'bp-beta-tester' ),
-					'<a href="' . esc_url( 'https://buddypress.trac.wordpress.org/newticket' ) . '">' . esc_html__( 'Development Tracker', 'bp-beta-tester' ) . '</a>',
-					'<a href="' . esc_url( 'https://buddypress.org/support/' ) . '">' . esc_html__( 'support forums', 'bp-beta-tester' ) . '</a>'
-				);
-				?>
-			</p>
-			<p><?php esc_html_e( 'One of the Core Developers/Support forum moderators will review your feedback and we\'ll do our best to fix it before the stable version is made available to the public.', 'bp-beta-tester' ); ?></p>
+
+			<?php if ( $is_latest_stable ) : ?>
+				<p>
+					<?php
+					printf(
+						/* translators: %1$s is the link to the BuddyPress account on Twitter and %2$s is the link to the BuddyPress blog. */
+						esc_html__( 'There is no pre-releases to test currently. Please consider following BuddyPress %1$s or checking %2$s regularly to be informed of the next pre-releases.', 'bp-beta-tester' ),
+						'<a href="' . esc_url( 'https://twitter.com/BuddyPress' ) . '">' . esc_html__( 'on Twitter', 'bp-beta-tester' ) . '</a>',
+						'<a href="' . esc_url( 'https://buddypress.org/blog/' ) . '">' . esc_html__( 'our blog', 'bp-beta-tester' ) . '</a>'
+					);
+					?>
+				</p>
+			<?php elseif ( isset( $installed['is_stable'] ) && ! $installed['is_stable'] ) : ?>
+				<h2><?php esc_html_e( 'Have you found a bug or a possible improvement?', 'bp-beta-tester' ); ?></h2>
+				<p>
+					<?php
+					printf(
+						/* translators: %1$s is the link to the BuddyPress Trac and %2$s is the link to the BuddyPress Support forums. */
+						esc_html__( 'Please let us know about it opening a new ticket on our %1$s or posting a new topic in our %2$s.', 'bp-beta-tester' ),
+						'<a href="' . esc_url( 'https://buddypress.trac.wordpress.org/newticket' ) . '">' . esc_html__( 'Development Tracker', 'bp-beta-tester' ) . '</a>',
+						'<a href="' . esc_url( 'https://buddypress.org/support/' ) . '">' . esc_html__( 'support forums', 'bp-beta-tester' ) . '</a>'
+					);
+					?>
+				</p>
+				<p><?php esc_html_e( 'One of the Core Developers/Support forum moderators will review your feedback and we\'ll do our best to fix it before the stable version is made available to the public.', 'bp-beta-tester' ); ?></p>
+			<?php endif; ?>
 		<?php endif; ?>
 	</div>
 	<?php

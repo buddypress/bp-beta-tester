@@ -10,7 +10,7 @@
 	},
 	"scripts": {
 		"wpcs": "./vendor/bin/phpcs class-bp-beta-tester.php inc/*.php --standard=WordPress",
-		"pot": "wp i18n make-pot . languages/bp-beta-tester.pot"
+		"pot": "wp i18n make-pot . languages/bp-beta-tester.pot --headers='{\"Report-Msgid-Bugs-To\": \"https://github.com/buddypress/bp-beta-tester/issues\", \"Last-Translator\": \"imath <imath@chat.wordpress.org>\", \"Language-Team\": \"ENGLISH\"}'"
 	},
 	"keywords": [
 		"buddypress",
@@ -26,5 +26,5 @@
 		"type": "git",
 		"url": "https://github.com/buddypress/bp-beta-tester.git"
 	},
-	"version": "1.0.0-beta1"
+	"version": "1.0.0-RC"
 }
