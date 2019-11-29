@@ -26,5 +26,5 @@
 		"type": "git",
 		"url": "https://github.com/buddypress/bp-beta-tester.git"
 	},
-	"version": "1.0.0-RC"
+	"version": "1.0.0"
 }
