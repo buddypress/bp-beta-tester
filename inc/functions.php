@@ -407,6 +407,19 @@ function bp_beta_tester_admin_page() {
 					?>
 				</p>
 				<p><?php esc_html_e( 'One of the Core Developers/Support forum moderators will review your feedback and we\'ll do our best to fix it before the stable version is made available to the public.', 'bp-beta-tester' ); ?></p>
+
+				<?php if ( bp_beta_tester_version_has_dev_notes( $latest ) ) : ?>
+					<h2><?php esc_html_e( 'What to expect from next release?', 'bp-beta-tester' ); ?></h2>
+					<p>
+						<?php
+						printf(
+							/* translators: %s is the link to next release development notes. */
+							esc_html__( 'We wrote some development notes about it. Please, make sure to check them on %s.', 'bp-beta-tester' ),
+							'<a href="' . esc_url( bp_beta_tester_get_version_dev_notes_url( $latest ) ) . '">' . esc_html__( 'our Development Blog', 'bp-beta-tester' ) . '</a>'
+						);
+						?>
+					</p>
+				<?php endif; ?>
 			<?php endif; ?>
 		<?php endif; ?>
 	</div>
@@ -487,6 +500,52 @@ function bp_beta_tester_plugins_api( $res = null, $action = '', $args = array() 
 	return $res;
 }
 add_filter( 'plugins_api_result', 'bp_beta_tester_plugins_api', 10, 3 );
+
+/**
+ * Gets a version development notes URL.
+ *
+ * @since 1.1.0
+ *
+ * @param string $version The version to get development notes for.
+ * @return string The version development notes URL.
+ */
+function bp_beta_tester_get_version_dev_notes_url( $version = '' ) {
+	$version = (float) $version;
+
+	if ( ! $version ) {
+		return false;
+	}
+
+	// Categories are using an hyphen instead of a dot on BP Devel.
+	$version = number_format( $version, 1, '-', '' );
+
+	return sprintf( 'https://bpdevel.wordpress.com/category/development-notes/%s/', esc_attr( $version ) );
+}
+
+/**
+ * Checks if some development notes are available on BP Devel.
+ *
+ * @since 1.1.0
+ *
+ * @param string $version The version to check develompent notes for.
+ * @return boolean True if there are some develompent notes. False otherwise.
+ */
+function bp_beta_tester_version_has_dev_notes( $version = '' ) {
+	global $wp_version;
+
+	if ( ! $version ) {
+		return false;
+	}
+
+	$response = wp_remote_get(
+		bp_beta_tester_get_version_dev_notes_url( $version ),
+		array(
+			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+		)
+	);
+
+	return 200 === wp_remote_retrieve_response_code( $response );
+}
 
 /**
  * Add a Dashboard submenu.
