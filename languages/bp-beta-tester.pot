@@ -1,17 +1,17 @@
-# Copyright (C) 2019 The BuddyPress Community
+# Copyright (C) 2020 The BuddyPress Community
 # This file is distributed under the same license as the BP Beta Tester plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: BP Beta Tester 1.0.0\n"
+"Project-Id-Version: BP Beta Tester 1.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/buddypress/bp-beta-tester/issues\n"
 "Last-Translator: imath <imath@chat.wordpress.org>\n"
 "Language-Team: ENGLISH\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-11-29T04:00:00+00:00\n"
+"POT-Creation-Date: 2020-04-10T03:20:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.3.0\n"
+"X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: bp-beta-tester\n"
 
 #. Plugin Name of the plugin
@@ -45,8 +45,8 @@ msgid "Upgrade to %s"
 msgstr ""
 
 #: inc/functions.php:327
-#: inc/functions.php:499
-#: inc/functions.php:520
+#: inc/functions.php:558
+#: inc/functions.php:579
 msgid "Beta Test BuddyPress"
 msgstr ""
 
@@ -115,11 +115,24 @@ msgstr ""
 msgid "One of the Core Developers/Support forum moderators will review your feedback and we'll do our best to fix it before the stable version is made available to the public."
 msgstr ""
 
+#: inc/functions.php:412
+msgid "What to expect from next release?"
+msgstr ""
+
+#. translators: %s is the link to next release development notes.
+#: inc/functions.php:417
+msgid "We wrote some development notes about it. Please, make sure to check them on %s."
+msgstr ""
+
+#: inc/functions.php:418
+msgid "our Development Blog"
+msgstr ""
+
 #. translators: the %s placeholder is for the BuddyPress release tag.
-#: inc/functions.php:480
+#: inc/functions.php:493
 msgid "The BuddyPress version %s is not available on WordPress.org."
 msgstr ""
 
-#: inc/functions.php:498
+#: inc/functions.php:557
 msgid "BuddyPress Beta Tester"
 msgstr ""
