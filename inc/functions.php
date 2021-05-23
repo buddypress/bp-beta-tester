@@ -173,22 +173,36 @@ function bp_beta_tester_reset_update_plugins( $transient = false ) {
 add_filter( 'pre_site_transient_update_plugins', 'bp_beta_tester_reset_update_plugins' );
 
 /**
- * Make sure to delete the transient once the pre-release is installed.
+ * Deletes the pre release transient.
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
-function bp_beta_tester_clean_pre_release_transient() {
-	$referer = wp_get_referer();
+function bp_beta_tester_delete_pre_release_transient() {
+	$pre_release = get_site_transient( 'bp_beta_tester_pre_release' );
 
-	if ( $referer ) {
-		$parts = wp_parse_args( wp_parse_url( $referer, PHP_URL_QUERY ), array() );
+	if ( isset( $pre_release->response['buddypress/bp-loader.php'] ) && isset( $pre_release->response['buddypress/bp-loader.php']->new_version ) ) {
+		$plugin_data = get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . 'buddypress/bp-loader.php', false, false );
 
-		if ( isset( $parts['page'] ) && 'bp-beta-tester' === $parts['page'] ) {
+		if ( isset( $plugin_data['Version'] ) && version_compare( $pre_release->response['buddypress/bp-loader.php']->new_version, $plugin_data['Version'], '=' ) ) {
 			delete_site_transient( 'bp_beta_tester_pre_release' );
 		}
 	}
 }
-add_action( 'admin_footer-update.php', 'bp_beta_tester_clean_pre_release_transient' );
+
+/**
+ * Make sure to delete the transient once the pre-release is installed.
+ *
+ * @since 1.0.0
+ * @since 1.2.0 Now Hooks to `upgrader_process_complete` instead of `admin_footer-update.php`.
+ *
+ * @param Plugin_Upgrader $upgrader The WP Core class used for upgrading/installing plugins.
+ */
+function bp_beta_tester_clean_pre_release_transient( $upgrader = null ) {
+	if ( isset( $upgrader->result['destination_name'] ) && 'buddypress' === $upgrader->result['destination_name'] ) {
+		bp_beta_tester_delete_pre_release_transient();
+	}
+}
+add_action( 'upgrader_process_complete', 'bp_beta_tester_clean_pre_release_transient', 9, 1 );
 
 /**
  * Register and enqueue admin style.
@@ -589,3 +603,25 @@ if ( is_multisite() ) {
 	add_action( 'admin_menu', 'bp_beta_tester_admin_menu' );
 	add_filter( 'plugin_action_links', 'bp_beta_tester_plugin_action_links', 10, 2 );
 }
+
+/**
+ * Plugin's version updater.
+ *
+ * @since 1.2.0
+ */
+function bp_beta_tester_version_updater() {
+	$version    = bp_beta_tester()->version;
+	$db_version = get_network_option( 0, '_bp_beta_tester_version', 0 );
+
+	if ( ! version_compare( $db_version, $version, '<' ) ) {
+		return;
+	}
+
+	if ( ! $db_version ) {
+		// Make sure the pre release transient is deleted.
+		bp_beta_tester_delete_pre_release_transient();
+	}
+
+	update_network_option( 0, '_bp_beta_tester_version', $version );
+}
+add_action( 'admin_init', 'bp_beta_tester_version_updater', 1000 );

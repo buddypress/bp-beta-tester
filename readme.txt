@@ -3,9 +3,9 @@ Contributors: johnjamesjacoby, DJPaul, boonebgorges, r-a-y, imath, mercime, tw21
 Donate link: https://wordpressfoundation.org
 Tags: buddypress, beta, RC, test, betatest
 Requires at least: 5.2
-Tested up to: 5.4
+Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ If you would like to provide monetary support to BuddyPress, please consider a d
 
 == Upgrade Notice ==
 
+= 1.2.0 =
+No specific upgrade notice.
+
 = 1.1.0 =
 No specific upgrade notice.
 
@@ -85,6 +88,9 @@ No specific upgrade notice.
 First version of the plugin. no specific upgrade notice.
 
 == Changelog ==
+
+= 1.2.0 =
+Makes sure the pre-release transient is deleted on a successful pre-release version install.
 
 = 1.1.0 =
 When testing Beta/RC, the plugin administration page now includes a link to the development notes of the upcoming release.
