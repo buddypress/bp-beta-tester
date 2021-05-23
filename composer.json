@@ -1,13 +1,15 @@
 {
-  "name": "buddypress/bp-beta-tester",
-  "description": "A plugin to switch between stable, beta or RC versions of BuddyPress.",
-  "type": "wordpress-plugin",
-  "require": {
-      "squizlabs/php_codesniffer" : "^3.3.1"
-  },
-  "require-dev": {
-      "dealerdirect/phpcodesniffer-composer-installer": "*",
-      "phpcompatibility/phpcompatibility-wp" : "*",
-      "wp-coding-standards/wpcs": "*"
-  }
+	"name": "buddypress/bp-beta-tester",
+	"description": "A plugin to switch between stable, beta or RC versions of BuddyPress.",
+	"type": "wordpress-plugin",
+	"require": {
+		"composer/installers": "^1.10.0",
+		"php": ">=5.6.0"
+	},
+	"require-dev": {
+		"phpcompatibility/phpcompatibility-wp": "^2.1.0",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+		"squizlabs/php_codesniffer" : "^3.5.4",
+		"wp-coding-standards/wpcs": "*"
+	}
 }
