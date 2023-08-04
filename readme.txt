@@ -3,7 +3,7 @@ Contributors: johnjamesjacoby, DJPaul, boonebgorges, r-a-y, imath, mercime, tw21
 Donate link: https://wordpressfoundation.org
 Tags: buddypress, beta, RC, test, betatest
 Requires at least: 5.2
-Tested up to: 5.7
+Tested up to: 6.3
 Requires PHP: 5.6
 Stable tag: 1.2.0
 License: GPLv2 or later
