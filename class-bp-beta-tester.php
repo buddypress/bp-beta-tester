@@ -34,6 +34,8 @@ final class BP_Beta_Tester {
 	/**
 	 * Instance of this class.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @var object
 	 */
 	protected static $instance = null;
@@ -41,12 +43,16 @@ final class BP_Beta_Tester {
 	/**
 	 * Used to store dynamic properties.
 	 *
+	 * @since 1.3.0
+	 *
 	 * @var array
 	 */
 	private $data = array();
 
 	/**
 	 * Initialize the plugin
+	 *
+	 * @since 1.0.0
 	 */
 	private function __construct() {
 		$this->inc();
@@ -55,7 +61,7 @@ final class BP_Beta_Tester {
 	/**
 	 * Magic method for checking the existence of a plugin global variable.
 	 *
-	 * @since 1.0.0
+	 * @since 1.3.0
 	 *
 	 * @param string $key Key to check the set status for.
 	 * @return bool
@@ -67,7 +73,7 @@ final class BP_Beta_Tester {
 	/**
 	 * Magic method for getting a plugin global variable.
 	 *
-	 * @since 1.0.0
+	 * @since 1.3.0
 	 *
 	 * @param string $key Key to return the value for.
 	 * @return mixed
@@ -84,7 +90,7 @@ final class BP_Beta_Tester {
 	/**
 	 * Magic method for setting a plugin global variable.
 	 *
-	 * @since 1.0.0
+	 * @since 1.3.0
 	 *
 	 * @param string $key   Key to set a value for.
 	 * @param mixed  $value Value to set.
@@ -96,7 +102,7 @@ final class BP_Beta_Tester {
 	/**
 	 * Magic method for unsetting a plugin global variable.
 	 *
-	 * @since 1.0.0
+	 * @since 1.3.0
 	 *
 	 * @param string $key Key to unset a value for.
 	 */
