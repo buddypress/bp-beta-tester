@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 function bp_beta_tester_globals() {
 	$bpbt = bp_beta_tester();
 
-	$bpbt->version = '1.2.0';
+	$bpbt->version = '1.3.0-alpha';
 
 	// Paths.
 	$bpbt->dir      = plugin_dir_path( dirname( __FILE__ ) );

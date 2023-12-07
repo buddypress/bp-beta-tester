@@ -11,7 +11,7 @@
  * Plugin Name:       BP Beta Tester
  * Plugin URI:        https://github.com/buddypress/bp-beta-tester
  * Description:       A plugin to switch between stable, beta or RC versions of BuddyPress.
- * Version:           1.2.0
+ * Version:           1.3.0-alpha
  * Author:            The BuddyPress Community
  * Author URI:        https://buddypress.org
  * Text Domain:       bp-beta-tester
