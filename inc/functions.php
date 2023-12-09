@@ -16,10 +16,15 @@ defined( 'ABSPATH' ) || exit;
  *
  * @param string $a The BuddyPress version to compare.
  * @param string $b The BuddyPress version to compare with.
- * @return boolean  True if $a < $b.
+ * @return integer 1 if $a < $b, -1 otherwise.
  */
 function bp_beta_tester_sort_versions( $a, $b ) {
-	return version_compare( $a, $b, '<' );
+	$is_lower = -1;
+	if ( version_compare( $a, $b, '<' ) ) {
+		$is_lower = 1;
+	}
+
+	return $is_lower;
 }
 
 /**
