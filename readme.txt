@@ -78,7 +78,7 @@ If you would like to provide monetary support to BuddyPress, please consider a d
 
 == Upgrade Notice ==
 
-= 1.2.0 =
+= 1.3.0 =
 No specific upgrade notice.
 
 = 1.2.0 =
