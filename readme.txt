@@ -3,9 +3,9 @@ Contributors: buddypress
 Donate link: https://wordpressfoundation.org
 Tags: buddypress, beta, RC, test, betatest
 Requires at least: 5.8
-Tested up to: 6.4
+Tested up to: 6.6
 Requires PHP: 5.6
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,9 @@ If you would like to provide monetary support to BuddyPress, please consider a d
 = 1.2.0 =
 No specific upgrade notice.
 
+= 1.2.0 =
+No specific upgrade notice.
+
 = 1.1.0 =
 No specific upgrade notice.
 
@@ -88,6 +91,9 @@ No specific upgrade notice.
 First version of the plugin. no specific upgrade notice.
 
 == Changelog ==
+
+= 1.3.0 =
+Avoid a deprecation notice about the `uksort()` function.
 
 = 1.2.0 =
 Makes sure the pre-release transient is deleted on a successful pre-release version install.
